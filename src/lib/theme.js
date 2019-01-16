@@ -16,5 +16,10 @@ export default {
     fontSizeLarge: 20,
     fontSizeXLarge: 25,
 
-    spacing: 10
+    spacing: 10,
+    spacingLeft: null,
+    spacingRight: null,
+    spacingBottom: null,
+    spacingTop: null,
+
 }
