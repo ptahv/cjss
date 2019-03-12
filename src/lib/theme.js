@@ -1,16 +1,23 @@
 export default {
+    colorText: '#000000',
+    colorBlack: '#000000',
     colorPrimary: '#007bff',
     colorPrimaryDark: '#6610f2',
     colorPrimaryLight: '#6f42c1',
     colorSecondary: '#6c757d',
     colorLight: '#f8f9fa',
-    colorBody: '#fff',
+    colorBody: '#ffffff',
     colorDisabled: '#6c757d',
-    colorWhite: '#fff',
+    colorDisabledLight: '#757780',
+    colorWhite: '#ffffff',
     colorLink: '#007bff',
     colorBorder: '#dee2e6',
+    colorSuccess: '#28a745',
+    colorError: '#dc3545',
+    colorWarning: '#ffc107',
+    colorTransparent: 'transparent',
 
-    fontSize: 13,
+    fontSizeNormal: 13,
     fontSizeSmall: 11,
     fontSizeXSmall: 10,
     fontSizeLarge: 20,
@@ -21,5 +28,7 @@ export default {
     spacingRight: null,
     spacingBottom: null,
     spacingTop: null,
+
+    borderRadius: 10
 
 }

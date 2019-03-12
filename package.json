@@ -1,6 +1,6 @@
 {
   "name": "cjss",
-  "version": "0.0.1-develop.1",
+  "version": "0.1.0-RC.1",
   "description": "Library for using common css in js",
   "files": [
     "dist",

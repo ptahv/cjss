@@ -1,80 +1,68 @@
+import upperFirst from 'lodash/upperFirst'
+import { spacing, theme, custom, common } from './classCreator.js';
+
 export default (t) => ({
     'width-max': { width: '100%' },
     'height-max': { height: '100%' },
-
-    'color-primary': { color: t.colorPrimary },
-    'color-primary-dark': { color: t.colorPrimaryDark },
-    'color-primary-light': { color: t.colorPrimaryLight },
-    'color-disabled': { color: t.colorDisabled },
-    'color-link': { color: t.colorLink },
-    'color-white': { color: t.colorWhite },
     
-    'font-size-small': { fontSize: t.fontSizeSmall },
-    'font-size-x-small': { fontSize: t.fontSizeXSmall },
-    'font-size-large': { fontSize: t.fontSizeLarge },
-    'font-size-x-large': { fontSize: t.fontSizeXLarge },
+    ...theme(t, 'color', 'color'),
+    ...theme(t, 'font-size', 'fontSize'),
+    ...theme(t, 'background-color', 'color'),
 
-    'background-color-primary': { backgroundColor: t.colorPrimary },
-    'background-color-primary-dark': { backgroundColor: t.colorPrimaryDark },
-    'background-color-primary-light': { backgroundColor: t.colorPrimaryLight },
-    'background-color-white': { backgroundColor: t.colorWhite },
-    'background-color-body': { backgroundColor: t.colorBody },
+    ...spacing(t, 'margin'),
+    ...spacing(t, 'padding'),
+
+    ...custom(
+        ['border'], 
+        ['', 'top', 'right', 'bottom', 'left'], 
+        [''], 
+        ({prefix}) => ({
+            ['border' + upperFirst(prefix) + 'Width']: 1,
+            borderStyle: 'solid', borderColor: t.colorBorder
+    })),
+    ...theme(t, 'border-color', 'color'),
     
-    'margin': { 
-        marginTop: t.spacing,
-        marginRight: t.spacingRight || t.spacing,
-        marginBottom: t.spacingBottom || t.spacing,
-        marginLeft: t.spacingLeft || t.spacing },
-    'margin-none': { margin: 0 },
-    'margin-bottom-none': { marginBottom: 0 },
-    'margin-top': { marginTop: t.spacingTop || t.spacing },
-    'margin-left': { marginLeft: t.spacingLeft || t.spacing },
-    'margin-left-negative': { marginLeft: -1 * (t.spacingLeft || t.spacing) },
-    'margin-left-half': { marginLeft: (t.spacingLeft || t.spacing)/2 },
+    ...custom(
+        ['border-radius'], 
+        ['', 'top', 'right', 'bottom', 'left'], 
+        ['', 'none'], 
+        ({propertyName, prefix, suffix}) => {
+            const v = suffix === 'none' ? 0 : t.borderRadius
 
-    'padding': { 
-        paddingTop: t.spacing,
-        paddingRight: t.spacingRight || t.spacing,
-        paddingBottom: t.spacingBottom || t.spacing,
-        paddingLeft: t.spacingLeft || t.spacing },
-    'padding-none': { padding: 0 },
-    'padding-top-none': { paddingTop: 0 },
-    'padding-bottom-none': { paddingBottom: 0 },
-    'padding-left-none': { paddingLeft: 0 },
-    'padding-right-none': { paddingRight: 0 },
+            return {
+                '':     { [propertyName]: v },
+                top:    { borderTopLeftRadius: v, borderTopRightRadius: v },
+                right:  { borderTopRightRadius: v, borderBottomRightRadius: v },
+                bottom: { borderBottomLeftRadius: v, borderBottomRightRadius: v },
+                left:   { borderTopLeftRadius: v, borderBottomLeftRadius: v }
+            }[prefix]
+        }
+    ),
 
-    'padding-horizontal-half': { paddingLeft: t.spacing/2, paddingRight: t.spacing/2 },
-    'padding-vertical-half': { paddingTop: t.spacing/2, paddingBottom: t.spacing/2  },
+    ...common('font-weight', ['normal', 'bold']),
+    ...common('display', ['flex', 'none']),
 
-    'border': { borderWidth: 1, borderStyle: 'solid', borderColor: t.colorBorder },
-    'border-color-primary-dark': { borderColor: t.colorPrimaryDark },
-    
-    'border-radius': { borderRadius: 15 },
-    'border-radius-none': { borderRadius: 0 },
-
-    'font-weight-bold': { fontWeight: 'bold' },
-    
-    'display-flex': { display: 'flex' },
-
-    'flex-direction-row': { flexDirection: 'row' },
     'flex': { flex: 1 },
+    ...common('flex-direction', ['row', 'column']),
 
-    'justify-content-center': { justifyContent: 'center' },
-    'justify-content-space-between': { justifyContent: 'space-between' },
-    'justify-content-flex-start': { justifyContent: 'flex-start' },
-    'justify-content-flex-end': { justifyContent: 'flex-end' },
+    ...common('justify-content', ['center', 'space-between', 'space-evenly', 'flex-start', 'flex-end']),
+    ...common('align-items', ['center', 'flex-start', 'flex-end']),
+    ...common('align-content', ['center', 'flex-start', 'flex-end']),
+    ...common('align-self', ['center', 'flex-start', 'flex-end']),
 
-    'align-items-center': { alignItems: 'center' },
-    'align-items-flex-start': { alignItems: 'flex-start' },
-    'align-items-flex-end': { alignItems: 'flex-end' },
+    ...common('overflow', ['hidden']),
 
-    'align-self-center': { alignSelf: 'center' },
-    'align-self-flex-start': { alignSelf: 'flex-start' },
-    'align-self-flex-end': { alignSelf: 'flex-end' },
+    ...common('text-align', ['right']),
+    ...common('text-transform', ['uppercase']),
 
-    'overflow-hidden': { overflow: 'hidden' },
+    ...common('position', ['relative', 'absolute']),
 
-    'box-shadow': { boxShadow: '0 1px 5px rgba(0,0,0,.14902), 0 1px 2px rgba(0,0,0,.0980392)' },
-
-    'text-align-right': { textAlign: 'right' }
+    ...custom(
+        ['top', 'right', 'bottom', 'left'], 
+        [''], 
+        ['', 'none'], 
+        ({className, suffix}) => ({
+            [className]: suffix === 'none' ? 'auto' : 0
+        })
+    )
 })

@@ -1,30 +1,43 @@
+import omit from 'lodash/fp/omit';
+
 import initTheme from './lib/theme.js';
 import initClasses from './lib/classes';
 
-let theme = initTheme;
-let classes = initClasses(theme);
+export let theme = initTheme;
+export let classes = initClasses(theme);
+export let classesFn = initClasses;
 
 let classesFns = [initClasses]
-const config = {
+function updateClasses() {
+    Object.assign(
+        classes, 
+        classesFns.reduce((r, v) => Object.assign({}, 
+            r, 
+            typeof v === 'function' ? v(theme) : v), {}
+        ))
+}
+
+export const config = {
     setTheme(newTheme) {
         Object.assign(theme, newTheme)
-        Object.assign(classes, classesFns.reduce((r, v) => Object.assign({}, r, v(theme)), {}))
+        updateClasses();
     },
 
     setClasses(newClassesFn) {
         classesFns = classesFns.concat(newClassesFn);
-        Object.assign(classes, classesFns.reduce((r, v) => Object.assign({}, r, v(theme)), {}))
+        updateClasses();
     }
 }
 
+const flatten = (r,v) => r.concat(v);
 export default Object.assign((...classNames) => (
     classNames
-        .flat()
+        .reduce(flatten, [])
         .filter(cn => typeof cn === 'string')
         .map(cn => cn.trim().split(' '))
-        .flat()
+        .reduce(flatten, [])
         .map(cn => cn.split('\n'))
-        .flat()
+        .reduce(flatten, [])
         .filter(Boolean)
         .reduce((ret, cn) => {
             const style = classes[cn] || {};
@@ -34,7 +47,10 @@ export default Object.assign((...classNames) => (
                 return ret;
             }
 
-            return Object.assign({}, ret, style)
+            return Object.assign({}, 
+                omit(Object.keys(style), ret), 
+                style
+            )
         }, {})
 ), {
     config,
